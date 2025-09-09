@@ -33,10 +33,12 @@ const Navigation = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="text-sm text-muted-foreground">
-              Demo Mode
-            </div>
-            <Button size="sm">Connect Calendar</Button>
+            <Button variant="outline" className="hidden sm:inline-flex" onClick={() => window.location.href = '/auth'}>
+              Sign In
+            </Button>
+            <Button variant="hero" onClick={() => window.location.href = '/auth'}>
+              Start Free Trial
+            </Button>
           </div>
         </div>
       </div>
