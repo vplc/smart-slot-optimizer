@@ -14,7 +14,298 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          duration_minutes: number | null
+          external_id: string | null
+          id: string
+          notes: string | null
+          price: number | null
+          service_type: string | null
+          source: Database["public"]["Enums"]["appointment_source"] | null
+          starts_at: string
+          status: Database["public"]["Enums"]["appointment_status"] | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          duration_minutes?: number | null
+          external_id?: string | null
+          id?: string
+          notes?: string | null
+          price?: number | null
+          service_type?: string | null
+          source?: Database["public"]["Enums"]["appointment_source"] | null
+          starts_at: string
+          status?: Database["public"]["Enums"]["appointment_status"] | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          duration_minutes?: number | null
+          external_id?: string | null
+          id?: string
+          notes?: string | null
+          price?: number | null
+          service_type?: string | null
+          source?: Database["public"]["Enums"]["appointment_source"] | null
+          starts_at?: string
+          status?: Database["public"]["Enums"]["appointment_status"] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_settings: {
+        Row: {
+          capacity: number | null
+          created_at: string | null
+          id: string
+          idle_cost: number | null
+          max_overbook_per_slot: number | null
+          max_wait_time_minutes: number | null
+          overtime_cost: number | null
+          revenue_per_appointment: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string | null
+          id?: string
+          idle_cost?: number | null
+          max_overbook_per_slot?: number | null
+          max_wait_time_minutes?: number | null
+          overtime_cost?: number | null
+          revenue_per_appointment?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string | null
+          id?: string
+          idle_cost?: number | null
+          max_overbook_per_slot?: number | null
+          max_wait_time_minutes?: number | null
+          overtime_cost?: number | null
+          revenue_per_appointment?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      customers: {
+        Row: {
+          consent_sms: boolean | null
+          created_at: string | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          consent_sms?: boolean | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          consent_sms?: boolean | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      model_params: {
+        Row: {
+          baseline_show_prob: number | null
+          beta_coefficients: Json | null
+          id: string
+          sigma_u: number | null
+          sigma_v: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          baseline_show_prob?: number | null
+          beta_coefficients?: Json | null
+          id?: string
+          sigma_u?: number | null
+          sigma_v?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          baseline_show_prob?: number | null
+          beta_coefficients?: Json | null
+          id?: string
+          sigma_u?: number | null
+          sigma_v?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          business_name: string | null
+          created_at: string | null
+          email: string
+          id: string
+          phone: string | null
+          timezone: string | null
+          twilio_number: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          phone?: string | null
+          timezone?: string | null
+          twilio_number?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          phone?: string | null
+          timezone?: string | null
+          twilio_number?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reminders: {
+        Row: {
+          appointment_id: string
+          cost_cents: number | null
+          created_at: string | null
+          delivered: boolean | null
+          id: string
+          link_clicked: boolean | null
+          message_text: string | null
+          sent_at: string | null
+          variant: Database["public"]["Enums"]["reminder_variant"]
+        }
+        Insert: {
+          appointment_id: string
+          cost_cents?: number | null
+          created_at?: string | null
+          delivered?: boolean | null
+          id?: string
+          link_clicked?: boolean | null
+          message_text?: string | null
+          sent_at?: string | null
+          variant: Database["public"]["Enums"]["reminder_variant"]
+        }
+        Update: {
+          appointment_id?: string
+          cost_cents?: number | null
+          created_at?: string | null
+          delivered?: boolean | null
+          id?: string
+          link_clicked?: boolean | null
+          message_text?: string | null
+          sent_at?: string | null
+          variant?: Database["public"]["Enums"]["reminder_variant"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminders_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      slot_features: {
+        Row: {
+          base_price: number | null
+          created_at: string | null
+          day_of_week: number | null
+          hour_of_day: number | null
+          id: string
+          is_holiday: boolean | null
+          is_school_break: boolean | null
+          lead_hours: number | null
+          slot_start: string
+          traffic_index: number | null
+          user_id: string
+          weather_precip: number | null
+          weather_temp: number | null
+        }
+        Insert: {
+          base_price?: number | null
+          created_at?: string | null
+          day_of_week?: number | null
+          hour_of_day?: number | null
+          id?: string
+          is_holiday?: boolean | null
+          is_school_break?: boolean | null
+          lead_hours?: number | null
+          slot_start: string
+          traffic_index?: number | null
+          user_id: string
+          weather_precip?: number | null
+          weather_temp?: number | null
+        }
+        Update: {
+          base_price?: number | null
+          created_at?: string | null
+          day_of_week?: number | null
+          hour_of_day?: number | null
+          id?: string
+          is_holiday?: boolean | null
+          is_school_break?: boolean | null
+          lead_hours?: number | null
+          slot_start?: string
+          traffic_index?: number | null
+          user_id?: string
+          weather_precip?: number | null
+          weather_temp?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +314,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      appointment_source: "google" | "calendly" | "manual"
+      appointment_status: "booked" | "showed" | "no_show" | "cancel"
+      reminder_variant: "T-24" | "T-6" | "T-2"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +443,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      appointment_source: ["google", "calendly", "manual"],
+      appointment_status: ["booked", "showed", "no_show", "cancel"],
+      reminder_variant: ["T-24", "T-6", "T-2"],
+    },
   },
 } as const
