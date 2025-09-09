@@ -7,6 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Users, Plus, Search, Phone, Mail, MessageSquare, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { CustomerModal } from "@/components/CustomerModal";
+import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
+import { Navigation } from "@/components/Navigation";
 
 interface Customer {
   id: string;
@@ -27,6 +30,13 @@ export default function Customers() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; customerId: string | null }>({
+    isOpen: false,
+    customerId: null,
+  });
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -54,6 +64,50 @@ export default function Customers() {
     }
   };
 
+  const handleEdit = (customer: Customer) => {
+    setEditingCustomer(customer);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (customerId: string) => {
+    setDeleteDialog({ isOpen: true, customerId });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteDialog.customerId) return;
+
+    setDeleteLoading(true);
+    try {
+      const { error } = await supabase
+        .from('customers')
+        .delete()
+        .eq('id', deleteDialog.customerId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Customer deleted successfully",
+      });
+
+      fetchCustomers();
+      setDeleteDialog({ isOpen: false, customerId: null });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete customer",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditingCustomer(null);
+  };
+
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -62,20 +116,25 @@ export default function Customers() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">Loading customers...</div>
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto p-6">
+          <div className="text-center">Loading customers...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold">Customers</h1>
           <p className="text-muted-foreground">Manage your customer database</p>
         </div>
-        <Button>
+        <Button onClick={() => setIsModalOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add Customer
         </Button>
@@ -108,7 +167,7 @@ export default function Customers() {
                 }
               </p>
               {!searchTerm && (
-                <Button>
+                <Button onClick={() => setIsModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
                   Add First Customer
                 </Button>
@@ -136,10 +195,10 @@ export default function Customers() {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(customer)}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(customer.id)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -179,6 +238,23 @@ export default function Customers() {
             ))}
           </div>
         )}
+      </div>
+
+      <CustomerModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        customer={editingCustomer}
+        onSave={fetchCustomers}
+      />
+
+      <DeleteConfirmDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={() => setDeleteDialog({ isOpen: false, customerId: null })}
+        onConfirm={confirmDelete}
+        title="Delete Customer"
+        description="Are you sure you want to delete this customer? This will also delete all their appointments. This action cannot be undone."
+        loading={deleteLoading}
+      />
       </div>
     </div>
   );

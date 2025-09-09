@@ -1,49 +1,51 @@
 import { Button } from "@/components/ui/button";
-import { Calculator, BarChart3, Settings, Calendar, Bell } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { Calculator, LayoutDashboard, Calendar, Users, Settings, LogOut } from "lucide-react";
 
-const Navigation = () => {
+export function Navigation() {
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
     <nav className="border-b border-border bg-card">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <div className="flex items-center space-x-2">
-              <Calculator className="h-8 w-8 text-primary" />
-              <h1 className="text-xl font-bold text-foreground">OverbookIQ</h1>
-            </div>
-            <div className="hidden md:block ml-10">
-              <div className="flex items-baseline space-x-4">
-                <Button variant="ghost" size="sm" className="text-foreground">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Dashboard
-                </Button>
-                <Button variant="ghost" size="sm" className="text-muted-foreground">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Calendar
-                </Button>
-                <Button variant="ghost" size="sm" className="text-muted-foreground">
-                  <Bell className="h-4 w-4 mr-2" />
-                  Reminders
-                </Button>
-                <Button variant="ghost" size="sm" className="text-muted-foreground">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-              </div>
-            </div>
+      <div className="flex h-16 items-center justify-between px-6">
+        <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2">
+            <Calculator className="h-8 w-8 text-primary" />
+            <span className="text-xl font-bold text-primary">OverbookIQ</span>
           </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" className="hidden sm:inline-flex" onClick={() => window.location.href = '/auth'}>
-              Sign In
+          
+          <div className="flex items-center space-x-1">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
+              <LayoutDashboard className="h-4 w-4 mr-2" />
+              Dashboard
             </Button>
-            <Button variant="hero" onClick={() => window.location.href = '/auth'}>
-              Start Free Trial
+            <Button variant="ghost" size="sm" onClick={() => navigate('/appointments')}>
+              <Calendar className="h-4 w-4 mr-2" />
+              Appointments
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => navigate('/customers')}>
+              <Users className="h-4 w-4 mr-2" />
+              Customers
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => navigate('/settings')}>
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
             </Button>
           </div>
         </div>
+
+        <Button variant="ghost" size="sm" onClick={handleSignOut}>
+          <LogOut className="h-4 w-4 mr-2" />
+          Sign Out
+        </Button>
       </div>
     </nav>
   );
-};
-
-export default Navigation;
+}
