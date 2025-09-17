@@ -1,73 +1,66 @@
-# Welcome to your Lovable project
+# OverbookIQ
 
-## Project info
+OverbookIQ is a Next.js + Supabase starter for optimizing appointment overbooking and SMS reminder timing. The project ships with a Postgres schema, core math utilities, minimal pages, and API route stubs so you can iterate on the full workflow end-to-end.
 
-**URL**: https://lovable.dev/projects/70a1e344-dda6-438b-9af7-3535020bf60f
+## Getting started
 
-## How can I edit this code?
+1. **Clone the repository** and install dependencies:
+   ```bash
+   git clone <repo-url>
+   cd smart-slot-optimizer
+   npm install
+   ```
 
-There are several ways of editing your application.
+2. **Copy the environment template**:
+   ```bash
+   cp .env.local.example .env.local
+   # fill in Supabase, Google, and Twilio credentials
+   ```
 
-**Use Lovable**
+3. **Run database migrations** (requires the Supabase CLI to be logged in and pointed at your project):
+   ```bash
+   npm run db:apply
+   ```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/70a1e344-dda6-438b-9af7-3535020bf60f) and start prompting.
+4. **Start the Next.js dev server**:
+   ```bash
+   npm run dev
+   ```
+   The app is available at [http://localhost:3000](http://localhost:3000).
 
-Changes made via Lovable will be committed automatically to this repo.
+## Available scripts
 
-**Use your preferred IDE**
+| Script | Description |
+| ------ | ----------- |
+| `npm run dev` | Start the Next.js development server. |
+| `npm run build` | Create an optimized production build. |
+| `npm run start` | Serve the production build. |
+| `npm run lint` | Run ESLint using the flat config. |
+| `npm run type-check` | Type-check the project without emitting files. |
+| `npm run test` | Execute Vitest unit tests located in `tests/`. |
+| `npm run db:apply` | Apply the SQL migrations via the Supabase CLI (falls back to a warning if the CLI is not installed). |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Project structure
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+app/
+  (public)/connect          – Integration onboarding screen
+  (app)/dashboard           – Weekly optimization summary
+  (app)/policy              – Editable policy levers
+  (app)/results             – Performance snapshots
+  api/                      – Supabase, Google OAuth, and optimization stubs
+components/                 – Shared UI (Nav, Card)
+db/migrations/              – Postgres schema compatible with Supabase
+lib/                        – Math utilities, Supabase helper, bandit logic
+tests/                      – Vitest suite for math helpers
 ```
 
-**Edit a file directly in GitHub**
+## Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The project is ready for deployment on Vercel. Ensure all environment variables from `.env.local` are configured in your Vercel project and that the Supabase database has been migrated. Once the build succeeds locally, push to your main branch and import the repository into Vercel for a one-click deploy.
 
-**Use GitHub Codespaces**
+## Notes
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/70a1e344-dda6-438b-9af7-3535020bf60f) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- The Google OAuth and Twilio integrations are currently stubs—they log payloads so you can verify the flow without hitting external APIs.
+- Supabase authentication uses the JavaScript client; wire up real email login flows in `/app/(public)` when ready.
+- The optimizer API uses coarse heuristics for initial viability. Replace with production-grade data retrieval and calibration as historical data becomes available.
