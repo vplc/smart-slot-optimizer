@@ -258,6 +258,30 @@ export type Database = {
           },
         ]
       }
+      reminder_bandit: {
+        Row: {
+          user_id: string
+          variant: Database["public"]["Enums"]["reminder_variant"]
+          a: number
+          b: number
+          updated_at: string | null
+        }
+        Insert: {
+          user_id: string
+          variant: Database["public"]["Enums"]["reminder_variant"]
+          a?: number
+          b?: number
+          updated_at?: string | null
+        }
+        Update: {
+          user_id?: string
+          variant?: Database["public"]["Enums"]["reminder_variant"]
+          a?: number
+          b?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       slot_features: {
         Row: {
           base_price: number | null
@@ -303,6 +327,42 @@ export type Database = {
           user_id?: string
           weather_precip?: number | null
           weather_temp?: number | null
+        }
+        Relationships: []
+      }
+      user_policy: {
+        Row: {
+          user_id: string
+          capacity_s: number
+          service_minutes: number
+          price_cents: number
+          penalty_over_cents: number
+          penalty_under_cents: number
+          sla_wait_minutes: number
+          max_overbook: number
+          updated_at: string | null
+        }
+        Insert: {
+          user_id: string
+          capacity_s?: number
+          service_minutes?: number
+          price_cents?: number
+          penalty_over_cents?: number
+          penalty_under_cents?: number
+          sla_wait_minutes?: number
+          max_overbook?: number
+          updated_at?: string | null
+        }
+        Update: {
+          user_id?: string
+          capacity_s?: number
+          service_minutes?: number
+          price_cents?: number
+          penalty_over_cents?: number
+          penalty_under_cents?: number
+          sla_wait_minutes?: number
+          max_overbook?: number
+          updated_at?: string | null
         }
         Relationships: []
       }

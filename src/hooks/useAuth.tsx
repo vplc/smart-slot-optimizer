@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { ensurePolicy } from '@/lib/policy';
 
 interface AuthContextType {
   user: User | null;
@@ -26,6 +27,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
         setLoading(false);
         
+        if (session?.user) {
+          ensurePolicy(session.user.id);
+        }
+
         // Create profile if user signs up
         if (event === 'SIGNED_IN' && session?.user) {
           setTimeout(() => {
@@ -40,6 +45,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+
+      if (session?.user) {
+        ensurePolicy(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
